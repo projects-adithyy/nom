@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Video Example</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #hidden-section {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+            overflow: hidden; /* Ensure hidden overflow for images */
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #reveal-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 2;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .moving-image {
+            position: absolute;
+            width: 180px; /* Adjust the size of the moving images */
+            height: 180px; /* Adjust the size of the moving images */
+        }
+        #reveal-container {
+      position: relative;
+    }
+
+    #reveal-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      background-color: #3498db;
+      border-radius: 50px;
+      overflow: hidden;
+      z-index: 1;
+      cursor: pointer;
+    }
+
+    #reveal-button:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform-origin: center;
+      pointer-events: none;
+    }
+    </style>
+</head>
+<body>
+
+<button id="reveal-button" onclick="revealVideo()">Reveal Your Prize</button>
+
+<section id="hidden-section">
+    <img class="moving-image" id="image1" src="content/1.jpeg" alt="Image 1">
+    <img class="moving-image" id="image2" src="content/sura.jpeg" alt="Image 2">
+    <video autoplay  loop>
+        <!-- Replace 'your-video.mp4' with the actual video file
+        <button id="reveal-button" onclick="revealVideo()">Reveal Your Prize</button> -->
+        <source src="content/bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</section>
+
+<script>
+    function revealVideo() {
+        var button = document.getElementById('reveal-button');
+        var hiddenSection = document.getElementById('hidden-section');
+
+        // Hide the button
+        button.style.display = 'none';
+        
+        // Display the hidden section
+        hiddenSection.style.display = 'block';
+        
+        // Play the video
+        var video = hiddenSection.querySelector('video');
+        video.play();
+         
+        // Move the images using JavaScript
+        moveImages();
+    }
+    function moveImages() {
+    var image1 = document.getElementById('image1');
+    var image2 = document.getElementById('image2');
+
+    var speed1 = 2.5; // Adjust the speed of movement for image 1
+    var speed2 = 2.5; // Adjust the speed of movement for image 2
+
+    var direction1X = 1; // 1 or -1 to represent the direction of movement for image 1 along the X-axis
+    var direction1Y = 1; // 1 or -1 to represent the direction of movement for image 1 along the Y-axis
+
+    var direction2X = -1; // 1 or -1 to represent the direction of movement for image 2 along the X-axis
+    var direction2Y = -1; // 1 or -1 to represent the direction of movement for image 2 along the Y-axis
+
+    // Set initial positions for images
+    image1.style.left = '0';
+    image1.style.top = '0';
+
+    image2.style.left = window.innerWidth - image2.width + 'px';
+    image2.style.top = window.innerHeight - image2.height + 'px';
+
+    function move() {
+        var x1 = parseFloat(image1.style.left) || 0;
+        var y1 = parseFloat(image1.style.top) || 0;
+
+        var x2 = parseFloat(image2.style.left) || 0;
+        var y2 = parseFloat(image2.style.top) || 0;
+
+        x1 += speed1 * direction1X;
+        y1 += speed1 * direction1Y;
+
+        x2 += speed2 * direction2X;
+        y2 += speed2 * direction2Y;
+
+        // Reverse direction when hitting the screen boundaries for image 1
+        if (x1 >= window.innerWidth - image1.width || x1 <= 0) {
+            direction1X *= -1;
+        }
+
+        if (y1 >= window.innerHeight - image1.height || y1 <= 0) {
+            direction1Y *= -1;
+        }
+
+        // Reverse direction when hitting the screen boundaries for image 2
+        if (x2 >= window.innerWidth - image2.width || x2 <= 0) {
+            direction2X *= -1;
+        }
+
+        if (y2 >= window.innerHeight - image2.height || y2 <= 0) {
+            direction2Y *= -1;
+        }
+
+        image1.style.left = x1 + 'px';
+        image1.style.top = y1 + 'px';
+
+        image2.style.left = x2 + 'px';
+        image2.style.top = y2 + 'px';
+
+        requestAnimationFrame(move);
+    }
+
+    move();
+}
+
+// Make sure to set initial position and style for images before calling moveImages()
+// For example:
+// image1.style.position = 'absolute';
+// image2.style.position = 'absolute';
+// moveImages();
+
+
+</script>
+
+</body>
+</html>
